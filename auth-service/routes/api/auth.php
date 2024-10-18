@@ -15,5 +15,9 @@ use App\Http\Controllers\Api\AuthController;
 |
 */
 
-Route::resource('/auth', AuthController::class);
+Route::controller(AuthController::class)->group(function (){
+    Route:: post('/register', 'register');
+    Route::get('/index', 'index');
+    Route::post('/login', 'login')->name('login');
+});
 

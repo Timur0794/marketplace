@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\StoreController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -14,11 +15,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::controller(StoreController::class)->middleware('auth.token')->group(function (){
+    Route::get('/store', 'index');
+    Route::get('/test', 'test');
 });
 
-$routeFileNames = array_slice(scandir(base_path('routes/api')), 2);
-foreach ($routeFileNames as $routeFileName) {
-    require __DIR__.'/api/'.$routeFileName;
-}

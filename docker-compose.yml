@@ -2,13 +2,14 @@ version: '3.8'
 
 services:
   auth-service:
+    hostname: auth
     image: webdevops/php-nginx:8.2-alpine
     container_name: auth-service
     restart: unless-stopped
     working_dir: /app
     volumes:
       - ./auth-service:/app
-      - ./auth-service/nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+      - ./auth-service/nginx/nginx.conf:/opt/docker/etc/nginx/vhost.conf
     networks:
       - marketplace_network
     ports:
@@ -16,6 +17,24 @@ services:
     depends_on:
       - postgres
       - redis
+
+  store-service:
+    hostname: store
+    image: webdevops/php-nginx:8.2-alpine
+    container_name: store-service
+    restart: unless-stopped
+    working_dir: /app
+    volumes:
+      - ./store-service:/app
+      - ./store-service/nginx/nginx.conf:/opt/docker/etc/nginx/vhost.conf
+    networks:
+      - marketplace_network
+    ports:
+      - "8081:80"
+    depends_on:
+      - postgres
+      - redis
+
 
   postgres:
     image: postgres:13
